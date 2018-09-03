@@ -9,9 +9,24 @@
 
 @interface CSCFPreferences : NSObject
 
+// Initialization
+
 - (instancetype)initWithBundleID:(NSString *)bundleID;
-- (id)objectForKey:(NSString *)key;
-- (void)setObject:(id)object forKey:(NSString *)key;
+- (instancetype)initWithbundleID:(NSString *)bundleID autoSyncronize:(BOOL)synchronize;
+
+// Syncronization
+
 - (BOOL)synchronize;
+
+// Convenience
+- (id)objectForKey:(NSString *)key;
+- (NSString *)stringForKey:(NSString *)key;
+- (BOOL)boolForKey:(NSString *)key;
+- (float)floatForKey:(NSString *)key;
+- (double)doubleForKey:(NSString *)key;
+- (int)intForKey:(NSString *)key;
+- (UIColor *)colorForKey:(NSString *)key;
+
+- (void)setObject:(id)object forKey:(NSString *)key;
 
 @end

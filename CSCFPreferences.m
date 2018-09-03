@@ -9,16 +9,17 @@
 
 @interface CSCFPreferences ()
 
-@property(nonatomic, copy) NSString* bundleID;
+@property(nonatomic, copy) NSString *bundleID;
+@property(nonatomic, assign) BOOL synchronize;
 
 @end
 
 @implementation CSCFPreferences
 
-#pragma mark - Initializer
+#pragma mark - Initialization
 
-- (instancetype)initWithbundleID:(NSString*)bundleID {
-    
+- (instancetype)initWithbundleID:(NSString *)bundleID {
+
     if ((self = [super init])) {
         self.bundleID = bundleID;
     }
@@ -26,12 +27,29 @@
     return self;
 }
 
-- (id)objectForKey:(NSString*)key {
-    CFPropertyListRef value = CFPreferencesCopyValue(
-        (__bridge CFStringRef)key,
-        (__bridge CFStringRef)self.bundleID,
-        kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+- (instancetype)initWithbundleID:(NSString *)bundleID autoSyncronize:(BOOL)synchronize {
+
+    if ((self = [[CSCFPreferences alloc] initWithbundleID:bundleID])) {
+        self.synchronize = synchronize;
+    }
+
+    return self;
+}
+
+#pragma mark - Synchronization
+
+- (BOOL)synchronize {
+    return CFPreferencesSynchronize( (__bridge CFStringRef)self.bundleID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+}
+
+#pragma mark - Convenience
+
+- (id)objectForKey:(NSString *)key {
     
+    [self synchronize];
+
+    CFPropertyListRef value = CFPreferencesCopyValue( (__bridge CFStringRef)key, (__bridge CFStringRef)self.bundleID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+
     id object = nil;
 
     if (value != NULL) {
@@ -42,17 +60,40 @@
     return object;
 }
 
-- (void)setObject:(id)object forKey:(NSString*)key {
-    CFPreferencesSetValue((__bridge CFStringRef)key,
-                          (__bridge CFPropertyListRef)object,
-                          (__bridge CFStringRef)self.bundleID,
-                          kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+- (NSString *)stringForKey:(NSString *)key {
+    
+    return [self objectForKey:key];
 }
 
-- (BOOL)synchronize {
-    return CFPreferencesSynchronize(
-        (__bridge CFStringRef)self.bundleID,
-        kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+- (BOOL)boolForKey:(NSString *)key {
+    
+    id value = [self objectForKey:key] ? : @(NO);
+    return [value boolValue];
+}
+
+- (float)floatForKey:(NSString *)key {
+    
+    id value = [self objectForKey:key] ? : @(0.0f);
+    return [value floatValue];
+}
+
+- (double)doubleForKey:(NSString *)key {
+    
+    id value = [self objectForKey:key] ? : @(0.0);
+    return [value doubleValue];
+}
+
+- (int)intForKey:(NSString *)key {
+    
+    id value = [self objectForKey:key] ? : @(0);
+    return [value intValue];
+}
+
+- (void)setObject:(id)object forKey:(NSString *)key {
+    
+    CFPreferencesSetValue((__bridge CFStringRef)key, (__bridge CFPropertyListRef)object, (__bridge CFStringRef)self.bundleID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+    
+    [self synchronize];
 }
 
 @end
