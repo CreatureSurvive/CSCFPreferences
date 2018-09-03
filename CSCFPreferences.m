@@ -45,8 +45,10 @@
 #pragma mark - Convenience
 
 - (id)objectForKey:(NSString *)key {
-    
-    [self synchronize];
+    if (self.synchronize) {
+
+        [self synchronize];
+    }
 
     CFPropertyListRef value = CFPreferencesCopyValue( (__bridge CFStringRef)key, (__bridge CFStringRef)self.bundleID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 
@@ -61,30 +63,30 @@
 }
 
 - (NSString *)stringForKey:(NSString *)key {
-    
+
     return [self objectForKey:key];
 }
 
 - (BOOL)boolForKey:(NSString *)key {
-    
+
     id value = [self objectForKey:key] ? : @(NO);
     return [value boolValue];
 }
 
 - (float)floatForKey:(NSString *)key {
-    
+
     id value = [self objectForKey:key] ? : @(0.0f);
     return [value floatValue];
 }
 
 - (double)doubleForKey:(NSString *)key {
-    
+
     id value = [self objectForKey:key] ? : @(0.0);
     return [value doubleValue];
 }
 
 - (int)intForKey:(NSString *)key {
-    
+
     id value = [self objectForKey:key] ? : @(0);
     return [value intValue];
 }
@@ -93,7 +95,10 @@
     
     CFPreferencesSetValue((__bridge CFStringRef)key, (__bridge CFPropertyListRef)object, (__bridge CFStringRef)self.bundleID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
     
-    [self synchronize];
+    if (self.synchronize) {
+
+        [self synchronize];
+    }
 }
 
 @end
