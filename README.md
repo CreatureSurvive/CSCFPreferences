@@ -67,7 +67,7 @@ Created and Maintained by [CreatureSurvive](https://creaturecoding.com/) (Dana B
 
 ## License
 
-This software is licensed under the MIT License, detailed in the file [LICENSE.md](https://github.com/CreatureSurvive/ CSCFPreferences/tree/master/LICENSE.md)
+This software is licensed under the MIT License, detailed in the file [LICENSE.md](https://github.com/CreatureSurvive/CSCFPreferences/tree/master/LICENSE.md)
 
 ## Submit Bugs & or Fixes:
 
