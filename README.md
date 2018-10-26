@@ -3,7 +3,7 @@
 a convenince wrapper built around `CFPreferences`
 This will allow you to use `CFPreferences` with the familiar syntax of `NSUserDefaults`. This can be useful for managing persistent values in tools where `NSUserDefaults` is not available.
 
-# Importing
+## Importing
 
 I recommend using git submodules to manage *CSCFPreferences*  
 
