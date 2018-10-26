@@ -12,7 +12,7 @@
 // Initialization
 
 - (instancetype)initWithBundleID:(NSString *)bundleID;
-- (instancetype)initWithbundleID:(NSString *)bundleID autoSyncronize:(BOOL)synchronize;
+- (instancetype)initWithBundleID:(NSString *)bundleID autoSyncronize:(BOOL)synchronize;
 
 // Syncronization
 
@@ -25,7 +25,6 @@
 - (float)floatForKey:(NSString *)key;
 - (double)doubleForKey:(NSString *)key;
 - (int)intForKey:(NSString *)key;
-- (UIColor *)colorForKey:(NSString *)key;
 
 - (void)setObject:(id)object forKey:(NSString *)key;
 

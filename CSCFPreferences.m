@@ -10,7 +10,7 @@
 @interface CSCFPreferences ()
 
 @property(nonatomic, copy) NSString *bundleID;
-@property(nonatomic, assign) BOOL synchronize;
+@property(nonatomic, assign) BOOL autoSyncronize;
 
 @end
 
@@ -18,7 +18,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithbundleID:(NSString *)bundleID {
+- (instancetype)initWithBundleID:(NSString *)bundleID {
 
     if ((self = [super init])) {
         self.bundleID = bundleID;
@@ -27,10 +27,10 @@
     return self;
 }
 
-- (instancetype)initWithbundleID:(NSString *)bundleID autoSyncronize:(BOOL)synchronize {
+- (instancetype)initWithBundleID:(NSString *)bundleID autoSyncronize:(BOOL)synchronize {
 
-    if ((self = [[CSCFPreferences alloc] initWithbundleID:bundleID])) {
-        self.synchronize = synchronize;
+    if ((self = [[CSCFPreferences alloc] initWithBundleID:bundleID])) {
+        self.autoSyncronize = synchronize;
     }
 
     return self;
@@ -45,7 +45,7 @@
 #pragma mark - Convenience
 
 - (id)objectForKey:(NSString *)key {
-    if (self.synchronize) {
+    if (self.autoSyncronize) {
 
         [self synchronize];
     }
@@ -93,12 +93,16 @@
 
 - (void)setObject:(id)object forKey:(NSString *)key {
     
-    CFPreferencesSetValue((__bridge CFStringRef)key, (__bridge CFPropertyListRef)object, (__bridge CFStringRef)self.bundleID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+	@try {
+		CFPreferencesSetValue((__bridge CFStringRef)key, (__bridge CFPropertyListRef)object, (__bridge CFStringRef)self.bundleID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
     
-    if (self.synchronize) {
+		if (self.autoSyncronize) {
 
-        [self synchronize];
-    }
+			[self synchronize];
+		}
+	} @catch (NSException *exception) {
+		NSLog(@"ERROR: failed to save object for key: %@ EXCEPTION: %@", key, exception.description);
+	}
 }
 
 @end
