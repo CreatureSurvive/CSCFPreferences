@@ -29,7 +29,7 @@ Alternatively, you can just clone the *CSCFPreferences* into your project.
 #import <CSCFPreferences.h>
 
 @interface MyClass : NSObject
-@prorperty(nonatomic, retain) CSCFPreferences *prefs;
+@property(nonatomic, retain) CSCFPreferences *prefs;
 @end
 
 @implementation CSCFPreferences
